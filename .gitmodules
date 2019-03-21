@@ -1,0 +1,3 @@
+[submodule "mupq"]
+	path = mupq
+	url = https://github.com/mupq/mupq.git
