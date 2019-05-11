@@ -3,7 +3,7 @@ OUTPUT_ARCH(riscv)
 
 ENTRY( _start )
 
-__ram_size = 256K
+__ram_size = 256K;
 
 MEMORY
 {
