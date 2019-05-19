@@ -3,8 +3,10 @@
 Builds all of the binaries without flashing them.
 """
 
-from interface import MuraxSettings
+from interface import VexRiscvSettings
 from mupq import mupq
 
+import sys
+
 if __name__ == "__main__":
-    mupq.BuildAll(MuraxSettings()).test_all()
+    mupq.BuildAll(VexRiscvSettings()).test_all(sys.argv[1:])
