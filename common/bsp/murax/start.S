@@ -2,7 +2,7 @@
   .global _start
   .type _start,@function
 _start:
-#ifndef MURAX_RW_MTVEC
+#ifndef VEXRISCV_RWMTVEC
   j _crtInit
   nop
   nop
@@ -22,6 +22,7 @@ _crtInit:
 .option pop
   la sp, _sp
 
+#ifndef VEXRISCV_VOLATILE
   /* Load data section */
   la a0, _data_lma
   la a1, _data
@@ -34,6 +35,7 @@ _crtInit:
   addi a1, a1, 4
   bltu a1, a2, 1b
 2:
+#endif
 
   /* Clear bss section */
   la a0, __bss_start
