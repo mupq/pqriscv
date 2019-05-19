@@ -5,11 +5,18 @@ OBJCOPY       = $(CROSS_PREFIX)-objcopy
 PLATFORM     ?= vexriscv
 include common/$(PLATFORM).mk
 DEFINES      ?=
-CFLAGS       += -O3 \
+DEBUG        ?= 1
+ifeq ($(DEBUG),1)
+CFLAGS       += -Os -g3
+else
+CFLAGS       += -O3
+endif
+CFLAGS       += \
               -Wall -Wextra -Wimplicit-function-declaration \
               -Wredundant-decls -Wmissing-prototypes -Wstrict-prototypes \
               -Wundef -Wshadow \
               -fno-common -MD $(DEFINES) \
+							-DPQRISCV_PLATFORM=$(PLATFORM) \
               $(PLATFORM_CFLAGS)
 LDFLAGS      += \
                 $(PLATFORM_LDFLAGS)
@@ -103,7 +110,7 @@ obj/$(TARGET_NAME)_%.o: $(IMPLEMENTATION_PATH)/%.S $(IMPLEMENTATION_HEADERS)
 	$(CC) -o $@ -c $(CFLAGS) -DMUPQ_NAMESPACE=$(MUPQ_NAMESPACE) \
 		-I$(IMPLEMENTATION_PATH) $(COMMONINCLUDES_RISCV) $<
 
-.PHONY: clean libclean
+.PHONY: clean
 
 clean:
 	rm -rf elf/
@@ -113,5 +120,4 @@ clean:
 	rm -rf testvectors/
 	rm -rf benchmarks/
 
-libclean:
-	make -C $(OPENCM3DIR) clean
+.SECONDARY:
