@@ -1,6 +1,6 @@
 from mupq import mupq
 
-class MuraxSettings(mupq.PlatformSettings):
+class VexRiscvSettings(mupq.PlatformSettings):
     #: Specify folders to include
     scheme_folders = [  # mupq.PlatformSettings.scheme_folders + [
         ('pqriscv', 'crypto_kem', ''),
@@ -21,7 +21,7 @@ class MuraxSettings(mupq.PlatformSettings):
     )
 
 
-class Murax(mupq.Platform):
+class VexRiscv(mupq.Platform):
 
     def __enter__(self):
         # TODO: Implement something
