@@ -2,7 +2,7 @@ CROSS_PREFIX ?= riscv64-unknown-elf
 CC            = $(CROSS_PREFIX)-gcc
 LD            = $(CROSS_PREFIX)-gcc
 OBJCOPY       = $(CROSS_PREFIX)-objcopy
-PLATFORM     ?= murax
+PLATFORM     ?= vexriscv
 include common/$(PLATFORM).mk
 DEFINES      ?=
 CFLAGS       += -O3 \
