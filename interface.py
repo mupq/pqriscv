@@ -20,6 +20,14 @@ class VexRiscvSettings(mupq.PlatformSettings):
         {'scheme': 'frodokem1344aes', 'implementation': 'clean'}
     )
 
+    def __init__(self, vexriscv_platform):
+        """Initialize with a specific pqvexriscv platform"""
+        self.makeflags = [
+            "PLATFORM=vexriscv",
+            f"VEXRISCV_PLATFORM={vexriscv_platform}",
+            "DEBUG=1"
+        ]
+
 
 class VexRiscv(mupq.Platform):
 
