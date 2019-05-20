@@ -5,7 +5,7 @@ OBJCOPY       = $(CROSS_PREFIX)-objcopy
 PLATFORM     ?= vexriscv
 include common/$(PLATFORM).mk
 DEFINES      ?=
-DEBUG        ?= 1
+DEBUG        ?= 0
 ifeq ($(DEBUG),1)
 CFLAGS       += -Os -g3
 else
