@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
 from mupq import mupq
-from interface import VexRiscvSettings, VexRiscv
+from interface import *
 
 import sys
 
 if __name__ == "__main__":
-    with VexRiscv() as riscv:
+    args, rest = parse_arguments()
+    riscv, settings = get_platform(args)
+    with platform:
         if "--nostack" not in sys.argv:
-            test = mupq.StackBenchmark(VexRiscvSettings(), riscv)
-            test.test_all(sys.argv[1:])
+            test = mupq.StackBenchmark(settings, riscv)
+            test.test_all(rest)
 
         if "--nospeed" not in sys.argv:
-            test = mupq.SpeedBenchmark(VexRiscvSettings(), riscv)
-            test.test_all(sys.argv[1:])
+            test = mupq.SpeedBenchmark(settings, riscv)
+            test.test_all(rest)
 
         if "--nohashing" not in sys.argv:
-            test = mupq.HashingBenchmark(VexRiscvSettings(), riscv)
-            test.test_all(sys.argv[1:])
+            test = mupq.HashingBenchmark(settings, riscv)
+            test.test_all(rest)
 
         if "--nosize" not in sys.argv:
-            test = mupq.SizeBenchmark(VexRiscvSettings(), riscv)
-            test.test_all(sys.argv[1:])
-
+            test = mupq.SizeBenchmark(settings, riscv)
+            test.test_all(rest)

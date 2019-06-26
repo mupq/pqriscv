@@ -1,6 +1,26 @@
+import argparse
 from mupq import mupq
 
+PQRISCV_PLATFORMS = 'vexriscv'
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='pqriscv specific settings')
+    parser.add_argument('-d', '--debug', help='Enable debug flags', default=False, action='store_true')
+    parser.add_argument('-p', '--platform', help='The pqriscv platform', choices=['vexriscv'], default='vexriscv')
+    parser.add_argument('-s', '--sub-platform', help='The platform subtype', default='pqvexriscvup5k')
+    return parser.parse_known_args()
+
+def get_platform(args):
+    # NOTE: Add new platforms with an elif args.platform == 'XYZ':...
+    if args.platform == 'vexriscv':
+        settings = VexRiscvSettings(args.sub_platform, args.debug)
+        platform = VexRiscv()
+    else:
+        raise ValueError('Unknown pqriscv platform')
+    return platform, settings
+
 class VexRiscvSettings(mupq.PlatformSettings):
+    PQVEXRISCV_PLATFORMS = ['murax', 'pqvexriscvup5k', 'pqvexriscvicoboard']
     #: Specify folders to include
     scheme_folders = [  # mupq.PlatformSettings.scheme_folders + [
         ('pqriscv', 'crypto_kem', ''),
@@ -20,13 +40,15 @@ class VexRiscvSettings(mupq.PlatformSettings):
         {'scheme': 'frodokem1344aes', 'implementation': 'clean'}
     )
 
-    def __init__(self, vexriscv_platform):
+    def __init__(self, vexriscv_platform, debug):
         """Initialize with a specific pqvexriscv platform"""
+        super(VexRiscvSettings, self).__init__()
         self.makeflags = [
             "PLATFORM=vexriscv",
             f"VEXRISCV_PLATFORM={vexriscv_platform}",
-            "DEBUG=1"
         ]
+        if debug:
+            self.makeflags += ["DEBUG=1"]
 
 
 class VexRiscv(mupq.Platform):

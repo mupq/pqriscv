@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 from mupq import mupq
-from interface import VexRiscvSettings, VexRiscv
+from interface import *
 
 import sys
 
 if __name__ == "__main__":
-    with VexRiscv() as riscv:
-        test = mupq.SimpleTest(VexRiscvSettings(), VexRiscv())
-        test.test_all(sys.argv[1:])
+    args, rest = parse_arguments()
+    riscv, settings = get_platform(args)
+    with riscv:
+        test = mupq.SimpleTest(settings, riscv)
+        test.test_all(rest)
