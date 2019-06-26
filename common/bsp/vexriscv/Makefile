@@ -23,6 +23,10 @@ ifeq ($(PLATFORM),pqvexriscvicoboard)
 CFLAGS += -DVEXRISCV_VOLATILE -DVEXRISCV_RWMTVEC
 endif
 
+ifeq ($(PLATFORM),pqvexriscvsim)
+CFLAGS += -DVEXRISCV_RWMTVEC
+endif
+
 CROSS_PREFIX ?= riscv64-unknown-elf
 CC = $(CROSS_PREFIX)-gcc
 AR = $(CROSS_PREFIX)-ar
