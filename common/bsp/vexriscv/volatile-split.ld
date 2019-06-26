@@ -5,7 +5,7 @@ SECTIONS
   .init :
   {
     KEEP (*(SORT_NONE(.init)))
-  } >ram
+  } >rom
 
   .text :
   {
@@ -13,12 +13,12 @@ SECTIONS
     *(.text.startup .text.startup.*)
     *(.text .text.*)
     *(.gnu.linkonce.t.*)
-  } >ram
+  } >rom
 
   .fini :
   {
     KEEP (*(SORT_NONE(.fini)))
-  } >ram
+  } >rom
 
   PROVIDE (__etext = .);
   PROVIDE (_etext = .);
@@ -31,7 +31,7 @@ SECTIONS
     PROVIDE_HIDDEN (__preinit_array_start = .);
     KEEP (*(.preinit_array))
     PROVIDE_HIDDEN (__preinit_array_end = .);
-  } >ram
+  } >rom
 
   .init_array :
   {
@@ -39,7 +39,7 @@ SECTIONS
     KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
     KEEP (*(.init_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
     PROVIDE_HIDDEN (__init_array_end = .);
-  } >ram
+  } >rom
 
   .fini_array :
   {
@@ -47,7 +47,7 @@ SECTIONS
     KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
     KEEP (*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
     PROVIDE_HIDDEN (__fini_array_end = .);
-  } >ram
+  } >rom
 
   .ctors :
   {
@@ -69,7 +69,7 @@ SECTIONS
     KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
     KEEP (*(SORT(.ctors.*)))
     KEEP (*(.ctors))
-  } >ram
+  } >rom
 
   .dtors :
   {
@@ -78,13 +78,13 @@ SECTIONS
     KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
     KEEP (*(SORT(.dtors.*)))
     KEEP (*(.dtors))
-  } >ram
+  } >rom
 
   .dalign :
   {
     . = ALIGN(4);
     PROVIDE( _data = . );
-  } >ram
+  } >rom
 
   /* RODATA is usally in ROM, however in volatile configurations this doesn't
      make a lot of sense. */

@@ -11,4 +11,4 @@ MEMORY
   ram (wxa!ri) : ORIGIN = 0x80010000, LENGTH = 64K
 }
 
-INCLUDE volatile.ld
+INCLUDE volatile-split.ld
