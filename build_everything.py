@@ -3,10 +3,12 @@
 Builds all of the binaries without flashing them.
 """
 
-from interface import VexRiscvSettings
+from interface import *
 from mupq import mupq
 
 import sys
 
 if __name__ == "__main__":
-    mupq.BuildAll(VexRiscvSettings()).test_all(sys.argv[1:])
+    args, rest = parse_arguments()
+    platform, settings = get_platform(args)
+    mupq.BuildAll(settings).test_all(rest)
