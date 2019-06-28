@@ -15,7 +15,7 @@ VEXRISCV_PLATFORM ?= pqvexriscvup5k
 VEXRISCV_LINKERSCRIPT = common/bsp/vexriscv/$(VEXRISCV_PLATFORM).ld
 # LD Flags that must be used to link executables for the Murax SoC
 VEXRISCV_LDFLAGS += $(RISCV_ARCHFLAGS)
-VEXRISCV_LDFLAGS += --specs=nano.specs --specs=nosys.specs
+VEXRISCV_LDFLAGS += --specs=nosys.specs
 VEXRISCV_LDFLAGS += -Wl,-T$(VEXRISCV_LINKERSCRIPT)
 VEXRISCV_LDFLAGS += -nostartfiles -ffreestanding -Wl,--gc-sections
 VEXRISCV_LDFLAGS += -Lcommon/bsp/vexriscv
