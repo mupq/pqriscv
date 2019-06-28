@@ -9,7 +9,7 @@ RISCV_ARCHFLAGS += -mcmodel=$(RISCV_CMODEL)
 CFLAGS += -Os -Wall -Wextra
 CFLAGS += $(RISCV_ARCHFLAGS)
 CFLAGS += -fstrict-volatile-bitfields
-CFLAGS += --specs=nano.specs --specs=nosys.specs
+CFLAGS += --specs=nosys.specs
 
 ifeq ($(PLATFORM),murax)
 CFLAGS += -DVEXRISCV_VOLATILE
