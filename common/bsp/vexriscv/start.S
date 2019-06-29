@@ -57,7 +57,7 @@ _crtInit:
   sw ra, 8(sp)
 
   /* Enable Interrupts and set trap vector */
-#ifndef MURAX_RW_MTVEC
+#ifndef VEXRISCV_RWMTVEC
   la a0, trap_entry
   csrw mtvec, a0
 #endif

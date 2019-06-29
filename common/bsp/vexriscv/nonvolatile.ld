@@ -29,6 +29,12 @@ SECTIONS
     *(.rdata)
     *(.rodata .rodata.*)
     *(.gnu.linkonce.r.*)
+		. = ALIGN(8);
+		*(.srodata.cst16)
+		*(.srodata.cst8)
+		*(.srodata.cst4)
+		*(.srodata.cst2)
+    *(.srodata .srodata.*)
   } >rom
 
   . = ALIGN(4);
@@ -90,30 +96,25 @@ SECTIONS
   .lalign :
   {
     . = ALIGN(4);
-    PROVIDE( _data_lma = . );
   } >rom
 
   .dalign :
   {
     . = ALIGN(4);
-    PROVIDE( _data = . );
   } >ram AT>rom
 
   .data :
   {
+    PROVIDE( _data = . );
     *(.data .data.*)
     *(.gnu.linkonce.d.*)
     . = ALIGN(8);
     PROVIDE( __global_pointer$ = . + 0x800 );
     *(.sdata .sdata.*)
-    *(.gnu.linkonce.s.*)
-    . = ALIGN(8);
-    *(.srodata.cst16)
-    *(.srodata.cst8)
-    *(.srodata.cst4)
-    *(.srodata.cst2)
-    *(.srodata .srodata.*)
+	  *(.gnu.linkonce.s.*)
   } >ram AT>rom
+
+  PROVIDE( _data_lma = LOADADDR(.data) );
 
   . = ALIGN(4);
   PROVIDE( _edata = . );
