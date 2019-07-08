@@ -1,5 +1,4 @@
 # pqriscv
-Post-quantum crypto library for the ARM Cortex-M4
 
 ## WIP
 
