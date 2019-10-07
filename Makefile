@@ -29,9 +29,9 @@ LDFLAGS_HOST =
 # override as desired
 TYPE ?= kem
 
-COMMONSOURCES=mupq/common/fips202.c mupq/common/sha2.c mupq/common/keccakf1600.c mupq/pqclean/common/aes.c mupq/common/sp800-185.c
+COMMONSOURCES=mupq/common/fips202.c mupq/common/sha2.c mupq/pqclean/common/aes.c mupq/common/sp800-185.c
 COMMONSOURCES_HOST=$(COMMONSOURCES) mupq/common/keccakf1600.c
-COMMONSOURCES_RISCV=$(COMMONSOURCES) common/keccakf1600.c common/keccakf1600_asm.c
+COMMONSOURCES_RISCV=$(COMMONSOURCES) common/keccakf1600.c common/keccakf1600_asm.S
 
 COMMONINCLUDES=-I"mupq/common"
 COMMONINCLUDES_RISCV=$(COMMONINCLUDES) -I"common"
