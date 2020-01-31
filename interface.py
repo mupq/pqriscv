@@ -168,12 +168,12 @@ class VexRiscv(mupq.Platform):
 
         def read(self):
             n = 0
-            while n < 120:
+            while n < 600:
                 c = self.f.read(1)
                 if c != b'':
                     return c
                 time.sleep(1)
-            return b''
+            raise Exception('Timeout!')
 
     def __init__(self, targetname, openocd_script, uart):
         super(VexRiscv, self).__init__()
