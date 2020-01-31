@@ -5,11 +5,15 @@ OBJCOPY       = $(CROSS_PREFIX)-objcopy
 PLATFORM     ?= vexriscv
 include common/$(PLATFORM).mk
 DEFINES      ?=
-DEBUG        ?= 0
-ifeq ($(DEBUG),1)
-CFLAGS       += -Os -g3
+OPT_SIZE     ?= 1
+ifeq ($(OPT_SIZE),1)
+CFLAGS       += -Os
 else
 CFLAGS       += -O3
+endif
+DEBUG        ?= 0
+ifeq ($(DEBUG),1)
+CFLAGS       += -g3
 endif
 CFLAGS       += \
               -Wall -Wextra -Wimplicit-function-declaration \
