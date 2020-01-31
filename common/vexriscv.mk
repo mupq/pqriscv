@@ -17,11 +17,12 @@ PLATFORM_BSP_DIR := $(dir $(lastword $(MAKEFILE_LIST)))bsp/vexriscv
 VEXRISCV_LINKERSCRIPT = $(PLATFORM_BSP_DIR)/$(VEXRISCV_PLATFORM).ld
 # LD Flags that must be used to link executables for the Murax SoC
 VEXRISCV_LDFLAGS += $(RISCV_ARCHFLAGS)
+VEXRISCV_LDFLAGS += --specs=nano.specs
 VEXRISCV_LDFLAGS += --specs=nosys.specs
 VEXRISCV_LDFLAGS += -Wl,-T$(VEXRISCV_LINKERSCRIPT)
 VEXRISCV_LDFLAGS += -nostartfiles -ffreestanding -Wl,--gc-sections
 VEXRISCV_LDFLAGS += -L$(PLATFORM_BSP_DIR)
-VEXRISCV_LDFLAGS += -Wl,--start-group -l$(VEXRISCV_PLATFORM)bsp -lc -Wl,--end-group
+VEXRISCV_LDFLAGS += -Wl,--start-group -l$(VEXRISCV_PLATFORM)bsp -lc -lm -Wl,--end-group
 
 PLATFORM_CFLAGS = $(VEXRISCV_CFLAGS) -DVEXRISCV_PLATFORM=$(VEXRISCV_PLATFORM)
 PLATFORM_LDFLAGS = $(VEXRISCV_LDFLAGS)

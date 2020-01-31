@@ -1,6 +1,7 @@
 import argparse
 import serial
 import subprocess
+import time
 from mupq import mupq
 
 PQRISCV_PLATFORMS = 'vexriscv'
@@ -24,7 +25,7 @@ def get_platform(args):
     return platform, settings
 
 class VexRiscvSettings(mupq.PlatformSettings):
-    PQVEXRISCV_PLATFORMS = ['murax', 'pqvexriscvup5k', 'pqvexriscvsim', 'pqvexriscvicoboard']
+    PQVEXRISCV_PLATFORMS = ['murax', 'pqvexriscvup5k', 'pqvexriscvsim', 'pqvexriscvsimhuge', 'pqvexriscvicoboard']
     #: Specify folders to include
     scheme_folders = [  # mupq.PlatformSettings.scheme_folders + [
         ('pqriscv', 'crypto_kem', ''),
@@ -83,6 +84,24 @@ class VexRiscvSettings(mupq.PlatformSettings):
 
 class VexRiscv(mupq.Platform):
 
+    class FileWrapper:
+
+        def __init__(self, f):
+            self.f = open(f, 'rb')
+            self.f.seek(0,2)
+
+        def close(self):
+            self.f.close()
+
+        def read(self):
+            n = 0
+            while n < 120:
+                c = self.f.read(1)
+                if c != b'':
+                    return c
+                time.sleep(1)
+            return b''
+
     def __init__(self, targetname, openocd_script, uart):
         super(VexRiscv, self).__init__()
         self.targetname = targetname
@@ -91,10 +110,13 @@ class VexRiscv(mupq.Platform):
         self._dev = None
 
     def __enter__(self):
-        self._dev = serial.Serial(self.uart, 115200, timeout=20)
+        if 'tty' in self.uart:
+            self._dev = serial.Serial(self.uart, 115200, timeout=20)
+        else:
+            self._dev = self.FileWrapper(self.uart)
         return super().__enter__()
 
-    def __exit__(self,*args, **kwargs):
+    def __exit__(self, *args, **kwargs):
         self._dev.close()
         self._dev = None
         return super().__exit__(*args, **kwargs)
