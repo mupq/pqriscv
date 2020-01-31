@@ -7,6 +7,9 @@ import sys
 if __name__ == "__main__":
     args, rest = parse_arguments()
     riscv, settings = get_platform(args)
+    for a in ["--nostack", "--nospeed", "--nohashing", "--nosize"]:
+        if a in rest:
+            rest.remove(a)
     with riscv:
         if "--nostack" not in sys.argv:
             test = mupq.StackBenchmark(settings, riscv)
@@ -20,6 +23,7 @@ if __name__ == "__main__":
             test = mupq.HashingBenchmark(settings, riscv)
             test.test_all(rest)
 
-        # if "--nosize" not in sys.argv:
-        #     test = mupq.SizeBenchmark(settings, riscv)
-        #     test.test_all(rest)
+        if "--nosize" not in sys.argv:
+            print(rest)
+            test = mupq.SizeBenchmark(settings, riscv)
+            test.test_all(rest)
