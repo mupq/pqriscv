@@ -13,9 +13,11 @@ benchmarking and testing framework.
 The **pqriscv** framework currently targets the
 [VexRiscv](https://github.com/SpinalHDL/VexRiscv)
 implementation of the RISC-V ISA. Dedicated implementations
-for various FPGAs, as well as a simulator are planned. The
-framework is, however, setup to potentially support multiple
-platforms in form of simple board support packages (BSP).
+for various FPGAs are provided by the
+[pqriscv-vexriscv](https://github.com/mupq/pqriscv-vexriscv)
+project. The framework is, however, setup to potentially
+support multiple platforms in form of simple board support
+packages (BSP).
 
 ### Toolchain
 You'll need a suitable GNU toolchain for your RISC-V target,
@@ -40,5 +42,12 @@ following flags:
 * `-d` / `--debug`: Compile everything with debug flags.
 
 ### Testing
-Currently, no testing akin to **pqm4** is supported. You'll
-have to load the ELF/binary manually onto your target.
+Testing akin to **pqm4** is currently a WIP. For now, the
+speed, hashing and size benchmarks work to some degree, as
+do the test vector tests. The tests require further command
+line flags to those mentioned above:
+
+* `-u UART`:
+* `--openocd-script SCRIPT`: This script will be passed to
+  OpenOCD to connect to the target (see
+  [pqriscv-vexriscv](https://github.com/mupq/pqriscv-vexriscv)).
