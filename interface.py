@@ -38,6 +38,12 @@ class VexRiscvSettings(mupq.PlatformSettings):
     ]
 
     large_schemes = (
+        {'scheme': 'sikep434'},
+        {'scheme': 'sikep503'},
+        {'scheme': 'sikep610'},
+        {'scheme': 'sikep751'},
+        {'scheme': 'lac192'},
+        {'scheme': 'lac256'},
         {'scheme': 'lac128'},
         {'scheme': 'lac192'},
         {'scheme': 'lac256'},
@@ -79,12 +85,8 @@ class VexRiscvSettings(mupq.PlatformSettings):
         {'scheme': 'dilithium4'},
         {'scheme': 'luov-7-110-374-chacha'},
         {'scheme': 'luov-7-110-374-keccak'},
-        # {'scheme': 'luov-47-42-182-chacha'},
-        # {'scheme': 'luov-47-42-182-keccak'},
-        # {'scheme': 'luov-61-60-261-chacha'},
-        # {'scheme': 'luov-61-60-261-keccak'},
-        # {'scheme': 'luov-7-57-197-chacha'},
-        # {'scheme': 'luov-7-57-197-keccak'},
+        {'scheme': 'luov-61-60-261-chacha'},
+        {'scheme': 'luov-61-60-261-keccak'},
         {'scheme': 'luov-7-83-283-chacha'},
         {'scheme': 'luov-7-83-283-keccak'},
         {'scheme': 'luov-79-76-341-chacha'},
@@ -100,6 +102,8 @@ class VexRiscvSettings(mupq.PlatformSettings):
         {'scheme': 'kyber1024-90s'},
         {'scheme': 'mqdss-48'},
         {'scheme': 'mqdss-64'},
+        {'scheme': 'qtesla-p-I'},
+        {'scheme': 'qtesla-p-III'},
         {'scheme': 'rainbowIa-classic'},
         {'scheme': 'rainbowIa-cyclic'},
         {'scheme': 'rainbowIa-cyclic-compressed'},
@@ -109,6 +113,12 @@ class VexRiscvSettings(mupq.PlatformSettings):
         {'scheme': 'rainbowVc-classic'},
         {'scheme': 'rainbowVc-cyclic'},
         {'scheme': 'rainbowVc-cyclic-compressed'},
+        {'scheme': 'sphincs-haraka-128s-robust'},
+        {'scheme': 'sphincs-haraka-128s-simple'},
+        {'scheme': 'sphincs-haraka-192s-robust'},
+        {'scheme': 'sphincs-haraka-192s-simple'},
+        {'scheme': 'sphincs-haraka-256s-robust'},
+        {'scheme': 'sphincs-haraka-256s-simple'},
         {'scheme': 'sphincs-haraka-192f-robust'},
         {'scheme': 'sphincs-haraka-192f-simple'},
         {'scheme': 'sphincs-haraka-256f-robust'},
@@ -173,7 +183,7 @@ class VexRiscv(mupq.Platform):
                 if c != b'':
                     return c
                 time.sleep(1)
-            raise Exception('Timeout!')
+            return b''
 
     def __init__(self, targetname, openocd_script, uart):
         super(VexRiscv, self).__init__()
