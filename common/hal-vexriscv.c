@@ -1,4 +1,4 @@
-#include "hal.h"
+#include <hal.h>
 
 void hal_setup(const enum clock_mode clock)
 {
@@ -57,4 +57,25 @@ __attribute__((naked)) uint64_t hal_get_time(void)
                 LE"csrr a2, mcycleh"
                 LE"bne a1, a2, hal_get_time"
                 LE"ret");
+}
+
+/* End of BSS is where the heap starts (defined in the linker script) */
+extern char end;
+static char* heap_end = &end;
+
+void* __wrap__sbrk (int incr)
+{
+  char* prev_heap_end;
+
+  prev_heap_end = heap_end;
+  heap_end += incr;
+
+  return (void *) prev_heap_end;
+}
+
+size_t hal_get_stack_size(void)
+{
+  register char* cur_stack;
+	__asm__ volatile ("mv %0, sp" : "=r" (cur_stack));
+  return cur_stack - heap_end;
 }

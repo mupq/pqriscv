@@ -1,5 +1,40 @@
-/* SECTIONS for volatile chip configuration, i.e. chips without flash */
+OUTPUT_FORMAT("elf32-littleriscv", "elf32-littleriscv", "elf32-littleriscv")
+OUTPUT_ARCH(riscv)
 
+ENTRY( _start )
+
+#if !defined(ROMORIGIN)
+#define ROMORIGIN 0x80000000
+#endif
+
+#if !defined(ROMSIZE)
+#error Must define ROMSIZE!
+#endif
+
+#if !defined(RAMORIGIN) && defined(RAMSIZE)
+#define RAMORIGIN ROMORIGIN + ROMSIZE
+#endif
+
+#if defined(RAMSIZE)
+#define RAMLOC ram
+#if defined(NONVOLATILE_ROM)
+#define ATROM AT>rom
+#else
+#define ATROM
+#endif
+#else
+#define RAMLOC rom
+#endif
+
+MEMORY
+{
+rom (wxa!ri) : ORIGIN = ROMORIGIN, LENGTH = ROMSIZE
+#if defined(RAMSIZE)
+ram (wxa!ri) : ORIGIN = RAMORIGIN, LENGTH = RAMSIZE
+#endif
+}
+
+/* SECTIONS for non-volatile chip configuration, i.e. chips with flash */
 SECTIONS
 {
   .init :
@@ -23,6 +58,19 @@ SECTIONS
   PROVIDE (__etext = .);
   PROVIDE (_etext = .);
   PROVIDE (etext = .);
+
+  .rodata :
+  {
+    *(.rdata)
+    *(.rodata .rodata.*)
+    *(.gnu.linkonce.r.*)
+		. = ALIGN(8);
+		*(.srodata.cst16)
+		*(.srodata.cst8)
+		*(.srodata.cst4)
+		*(.srodata.cst2)
+    *(.srodata .srodata.*)
+  } >rom
 
   . = ALIGN(4);
 
@@ -80,36 +128,28 @@ SECTIONS
     KEEP (*(.dtors))
   } >rom
 
+  .lalign :
+  {
+    . = ALIGN(4);
+  } >rom
+
   .dalign :
   {
     . = ALIGN(4);
-    PROVIDE( _data = . );
-  } >rom
-
-  /* RODATA is usally in ROM, however in volatile configurations this doesn't
-     make a lot of sense. */
-  .rodata :
-  {
-    *(.rdata)
-    *(.rodata .rodata.*)
-    *(.gnu.linkonce.r.*)
-  } >ram
+  } > RAMLOC ATROM
 
   .data :
   {
+    PROVIDE( _data = . );
     *(.data .data.*)
     *(.gnu.linkonce.d.*)
     . = ALIGN(8);
     PROVIDE( __global_pointer$ = . + 0x800 );
     *(.sdata .sdata.*)
-    *(.gnu.linkonce.s.*)
-    . = ALIGN(8);
-    *(.srodata.cst16)
-    *(.srodata.cst8)
-    *(.srodata.cst4)
-    *(.srodata.cst2)
-    *(.srodata .srodata.*)
-  } >ram
+	  *(.gnu.linkonce.s.*)
+  } > RAMLOC ATROM
+
+  PROVIDE( _data_lma = LOADADDR(.data) );
 
   . = ALIGN(4);
   PROVIDE( _edata = . );
@@ -117,7 +157,6 @@ SECTIONS
 
   PROVIDE( _fbss = . );
   PROVIDE( __bss_start = . );
-
   .bss :
   {
     *(.sbss*)
@@ -126,12 +165,12 @@ SECTIONS
     *(.gnu.linkonce.b.*)
     *(COMMON)
     . = ALIGN(4);
-  } >ram
+  } >RAMLOC
 
   . = ALIGN(8);
   PROVIDE( _end = . );
   PROVIDE( end = . );
 }
 
-PROVIDE(_sp = ORIGIN(ram) + LENGTH(ram));
-PROVIDE(_heap_end = ORIGIN(ram) + LENGTH(ram));
+PROVIDE(_sp = ORIGIN(RAMLOC) + LENGTH(RAMLOC));
+PROVIDE(_heap_end = ORIGIN(RAMLOC) + LENGTH(RAMLOC));

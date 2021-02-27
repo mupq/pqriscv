@@ -1,29 +1,27 @@
 #!/usr/bin/env python3
 from mupq import mupq
-from interface import *
-
-import sys
+from interface import parse_arguments, get_platform
 
 if __name__ == "__main__":
     args, rest = parse_arguments()
-    riscv, settings = get_platform(args)
-    for a in ["--nostack", "--nospeed", "--nohashing", "--nosize"]:
-        if a in rest:
-            rest.remove(a)
-    with riscv:
-        if "--nostack" not in sys.argv:
-            test = mupq.StackBenchmark(settings, riscv)
-            test.test_all(rest)
+    platform, settings = get_platform(args)
+    with platform:
+        schemes = [s for s in rest if s not in ['--nostack',
+                                                '--nospeed',
+                                                '--nohashing',
+                                                '--nosize']]
+        if "--nostack" not in rest:
+            test = mupq.StackBenchmark(settings, platform)
+            test.test_all(schemes)
 
-        if "--nospeed" not in sys.argv:
-            test = mupq.SpeedBenchmark(settings, riscv)
-            test.test_all(rest)
+        if "--nospeed" not in rest:
+            test = mupq.SpeedBenchmark(settings, platform)
+            test.test_all(schemes)
 
-        if "--nohashing" not in sys.argv:
-            test = mupq.HashingBenchmark(settings, riscv)
-            test.test_all(rest)
+        if "--nohashing" not in rest:
+            test = mupq.HashingBenchmark(settings, platform)
+            test.test_all(schemes)
 
-        if "--nosize" not in sys.argv:
-            print(rest)
-            test = mupq.SizeBenchmark(settings, riscv)
-            test.test_all(rest)
+        if "--nosize" not in rest:
+            test = mupq.SizeBenchmark(settings, platform)
+            test.test_all(schemes)
