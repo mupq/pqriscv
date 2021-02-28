@@ -491,21 +491,54 @@ void sha512_inc_init(sha512ctx *state) {
 #endif
 }
 
-void sha224_inc_clone_state(sha224ctx *stateout, const sha224ctx *statein) {
+void sha224_inc_ctx_clone(sha224ctx *stateout, const sha224ctx *statein) {
     memcpy(stateout, statein, sizeof(sha224ctx));
 }
 
-void sha256_inc_clone_state(sha256ctx *stateout, const sha256ctx *statein) {
+void sha256_inc_ctx_clone(sha256ctx *stateout, const sha256ctx *statein) {
     memcpy(stateout, statein, sizeof(sha256ctx));
 }
 
-void sha384_inc_clone_state(sha384ctx *stateout, const sha384ctx *statein) {
+void sha384_inc_ctx_clone(sha384ctx *stateout, const sha384ctx *statein) {
     memcpy(stateout, statein, sizeof(sha384ctx));
 }
 
-void sha512_inc_clone_state(sha512ctx *stateout, const sha512ctx *statein) {
+void sha512_inc_ctx_clone(sha512ctx *stateout, const sha512ctx *statein) {
     memcpy(stateout, statein, sizeof(sha512ctx));
 }
+
+/* Destroy the hash state.
+ *
+ * Because this implementation is stack-based, this is a no-op
+ */
+void sha224_inc_ctx_release(sha224ctx *state) {
+    (void)state;
+}
+
+/* Destroy the hash state.
+ *
+ * Because this implementation is stack-based, this is a no-op
+ */
+void sha256_inc_ctx_release(sha256ctx *state) {
+    (void)state;
+}
+
+/* Destroy the hash state.
+ *
+ * Because this implementation is stack-based, this is a no-op
+ */
+void sha384_inc_ctx_release(sha384ctx *state) {
+    (void)state;
+}
+
+/* Destroy the hash state.
+ *
+ * Because this implementation is stack-based, this is a no-op
+ */
+void sha512_inc_ctx_release(sha512ctx *state) {
+    (void)state;
+}
+
 
 void sha256_inc_blocks(sha256ctx *state, const uint8_t *in, size_t inblocks) {
 #ifdef PROFILE_HASHING
