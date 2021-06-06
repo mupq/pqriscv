@@ -42,6 +42,13 @@ obj/libpqvexriscvhal.a: CPPFLAGS += \
 	$(if $(VEXRISCV_NONVOLATILE_ROM),,-DVEXRISCV_VOLATILE) \
 	$(if $(VEXRISCV_RWMTVEC),-DVEXRISCV_RWMTVEC)
 
+ifeq ($(AIO),1)
+LDLIBS +=
+LIBDEPS += $$(if $$(NO_RANDOMBYTES),$(filter-out common/randombytes.c,$(LIBHAL_SRC)),$(LIBHAL_SRC))
+else
+LDLIBS += -lpqm4hal$(if $(NO_RANDOMBYTES),-nornd)
+LIBDEPS += obj/libpqm4hal$$(if $$(NO_RANDOMBYTES),-nornd).a
+endif
 
 LDSCRIPT = obj/ldscript.ld
 
