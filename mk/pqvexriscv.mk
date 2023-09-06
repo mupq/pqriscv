@@ -1,4 +1,4 @@
-RISCV_ARCH ?= rv32imc
+RISCV_ARCH ?= rv32imzicsr
 RISCV_ABI ?= ilp32
 RISCV_CMODEL ?= medany
 
@@ -45,15 +45,16 @@ obj/libpqvexriscvhal.a: CPPFLAGS += \
 ifeq ($(AIO),1)
 LDLIBS +=
 LIBDEPS += $$(if $$(NO_RANDOMBYTES),$(filter-out common/randombytes.c,$(LIBHAL_SRC)),$(LIBHAL_SRC))
+CPPFLAGS += \
+	-Icommon/vexriscv \
+	$(if $(VEXRISCV_NONVOLATILE_ROM),,-DVEXRISCV_VOLATILE) \
+	$(if $(VEXRISCV_RWMTVEC),-DVEXRISCV_RWMTVEC)
 else
-LDLIBS += -lpqm4hal$(if $(NO_RANDOMBYTES),-nornd)
-LIBDEPS += obj/libpqm4hal$$(if $$(NO_RANDOMBYTES),-nornd).a
+LDLIBS += -lpqvexriscvhal$(if $(NO_RANDOMBYTES),-nornd)
+LIBDEPS += obj/libpqvexriscvhal.a obj/libpqvexriscvhal-nornd.a
 endif
 
 LDSCRIPT = obj/ldscript.ld
-
-LDLIBS += -lpqvexriscvhal$(if $(NO_RANDOMBYTES),-nornd)
-LIBDEPS += obj/libpqvexriscvhal.a obj/libpqvexriscvhal-nornd.a
 
 $(LDSCRIPT): common/vexriscv/vexriscv.ld $(CONFIG)
 	@printf "  GENLNK  $@\n"; \
